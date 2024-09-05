@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sequelize = require('./models/db');
 const Product = require('./models/Product');
+const Sale = require('./models/Sale');
 
 const app = express();
 const PORT = 3000;
@@ -14,7 +15,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to Inventory and Sales Management App');
 });
 
-// Sync database and start server
+// Sync database
 sequelize.sync()
   .then(() => {
     console.log('Database synced');
@@ -94,6 +95,53 @@ app.delete('/products/:id', async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: 'Error deleting product' });
+  }
+});
+
+// Sales routes
+
+// 1. Create a Sale (decrease stock and record sale)
+app.post('/sales', async (req, res) => {
+  const { productId, quantity } = req.body;
+  try {
+    // Find the product by ID
+    const product = await Product.findByPk(productId);
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    // Check if there is enough stock
+    if (product.quantity < quantity) {
+      return res.status(400).json({ error: 'Not enough stock available' });
+    }
+
+    // Calculate total price
+    const totalPrice = product.price * quantity;
+
+    // Create the sale record
+    const sale = await Sale.create({
+      productId: product.id,
+      quantity,
+      totalPrice
+    });
+
+    // Decrease the product's stock
+    product.quantity -= quantity;
+    await product.save();
+
+    res.status(201).json({ message: 'Sale recorded successfully', sale });
+  } catch (error) {
+    res.status(500).json({ error: 'Error processing sale' });
+  }
+});
+
+// 2. Get all Sales
+app.get('/sales', async (req, res) => {
+  try {
+    const sales = await Sale.findAll({ include: Product });
+    res.json(sales);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching sales' });
   }
 });
 

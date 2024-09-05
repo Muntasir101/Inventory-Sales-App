@@ -1,0 +1,21 @@
+
+Sale.js Model
+
+Attributes:
+
+productId: Foreign key referencing the product being sold.
+quantity: Number of items sold.
+totalPrice: Calculated based on the product price and quantity.
+saleDate: Date of the sale (auto-generated).
+
+
+Relationships:
+
+A Sale is associated with a Product. The Sale model will reference the Product model using a foreign key.
+
+Create Sale (POST /sales):
+This endpoint creates a new sale record. It checks if the product exists and if enough stock is available.
+If the sale is successful, the stock of the product is reduced.
+
+Get All Sales (GET /sales):
+This endpoint retrieves all sales records, including details of the associated product.
