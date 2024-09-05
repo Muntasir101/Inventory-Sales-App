@@ -1,0 +1,6 @@
+route: /download-report
+
+Access the PDF Download Route
+To download the report, users can access:
+
+http://localhost:3000/download-report?startDate=2024-01-01&endDate=2024-12-31

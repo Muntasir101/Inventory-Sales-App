@@ -1,0 +1,569 @@
+{
+	"info": {
+		"_postman_id": "4af82806-5a77-4540-b6a9-bc641c85704c",
+		"name": "inventory-sales",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25813225",
+		"_collection_link": "https://galactic-comet-515044.postman.co/workspace/Batch_19~7e725f46-0136-441b-8fd5-fa143c43cddc/collection/25813225-4af82806-5a77-4540-b6a9-bc641c85704c?action=share&source=collection_link&creator=25813225"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "create-products",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Laptop\",\r\n  \"price\": 20000.00,\r\n  \"quantity\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Laptop\",\r\n  \"price\": 1200.00,\r\n  \"quantity\": 10\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/products",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"products"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "129"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"81-++ZJpTR4jGlOdX3YKVZ6R2QVA0A\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Sep 2024 07:40:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 2,\n    \"name\": \"Laptop\",\n    \"price\": 1200,\n    \"quantity\": 10,\n    \"updatedAt\": \"2024-09-05T07:40:10.085Z\",\n    \"createdAt\": \"2024-09-05T07:40:10.085Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "update-product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Laptop\",\r\n  \"price\": 1200.00,\r\n  \"quantity\": 10\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/products/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Laptop\",\r\n  \"price\": 1200.00,\r\n  \"quantity\": 10\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/products/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"products",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "129"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"81-hsP+JsMuDuU6byMlYa8CbfjFK/I\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Sep 2024 07:58:20 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"name\": \"Laptop\",\n    \"price\": 1200,\n    \"quantity\": 10,\n    \"createdAt\": \"2024-09-05T07:14:59.528Z\",\n    \"updatedAt\": \"2024-09-05T07:58:20.450Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "all-products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/products",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"products"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "261"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"105-TNbL4ui/k3knOTF69KRmPEo9HN0\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Sep 2024 07:59:40 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Laptop\",\n        \"price\": 1200,\n        \"quantity\": 10,\n        \"createdAt\": \"2024-09-05T07:14:59.528Z\",\n        \"updatedAt\": \"2024-09-05T07:58:20.450Z\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Laptop\",\n        \"price\": 1200,\n        \"quantity\": 10,\n        \"createdAt\": \"2024-09-05T07:40:10.085Z\",\n        \"updatedAt\": \"2024-09-05T07:40:10.085Z\"\n    }\n]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Sales",
+			"item": [
+				{
+					"name": "create sales",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\": 1,\r\n  \"quantity\": 5,\r\n  \"salesPrice\": 30000\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/sales",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"sales"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create sales",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"productId\": 1,\r\n  \"quantity\": 5,\r\n  \"salesPrice\": 30000\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/sales",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"sales"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "238"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"ee-l5G3G4pURFql0Bq6hUi6cb3/qhI\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Sep 2024 08:18:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Sale recorded successfully\",\n    \"sale\": {\n        \"saleDate\": \"2024-09-05T08:18:43.371Z\",\n        \"id\": 1,\n        \"productId\": 1,\n        \"quantity\": 5,\n        \"salesPrice\": 30000,\n        \"totalPrice\": 150000,\n        \"updatedAt\": \"2024-09-05T08:18:43.371Z\",\n        \"createdAt\": \"2024-09-05T08:18:43.371Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "all sales",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/sales",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"sales"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "all sales",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/sales",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"sales"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "162"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"a2-hFG3rhlR8rFDc0fhpJvzMRfNlFw\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Sep 2024 08:19:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"saleId\": 1,\n        \"productName\": \"Laptop\",\n        \"quantity\": 5,\n        \"buyingPrice\": 20000,\n        \"salesPrice\": 30000,\n        \"totalPrice\": 150000,\n        \"saleDate\": \"2024-09-05T08:18:43.371Z\",\n        \"profit\": 50000\n    }\n]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "report",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/reports?startDate=2024-09-01&endDate=2024-09-30",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reports"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-09-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-09-30"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "report",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/reports?startDate=2024-09-01&endDate=2024-09-30",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"reports"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-09-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-09-30"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "255"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"ff-4vpTafnzwhlNsxwfgUvzyIjdCDQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Sep 2024 08:19:50 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"totalRevenue\": 150000,\n    \"totalItemsSold\": 5,\n    \"totalProfit\": 50000,\n    \"totalSales\": 1,\n    \"salesDetails\": [\n        {\n            \"saleId\": 1,\n            \"productName\": \"Laptop\",\n            \"quantity\": 5,\n            \"buyingPrice\": 20000,\n            \"salesPrice\": 30000,\n            \"totalPrice\": 150000,\n            \"profit\": 50000,\n            \"saleDate\": \"2024-09-05T08:18:43.371Z\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "report-download",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/download-report?startDate=2024-01-01&endDate=2024-12-31",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"download-report"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-12-31"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

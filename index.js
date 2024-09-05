@@ -4,6 +4,9 @@ const sequelize = require('./models/db');
 const Product = require('./models/Product');
 const Sale = require('./models/Sale');
 const { Op } = require('sequelize');
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
@@ -231,6 +234,91 @@ app.get('/reports', async (req, res) => {
     res.status(500).json({ error: 'Error generating report' });
   }
 });
+
+// Report generation and PDF download route
+app.get('/download-report', async (req, res) => {
+    const { startDate, endDate } = req.query;
+  
+    // Validate input
+    if (!startDate || !endDate) {
+      return res.status(400).json({ error: 'Please provide startDate and endDate in query parameters' });
+    }
+  
+    try {
+      // Fetch sales within the specified date range
+      const sales = await Sale.findAll({
+        where: {
+          saleDate: {
+            [Op.between]: [new Date(startDate), new Date(endDate)]
+          }
+        },
+        include: Product
+      });
+  
+      // Calculate total revenue, total items sold, and total profit/loss
+      let totalRevenue = 0;
+      let totalItemsSold = 0;
+      let totalProfit = 0;
+  
+      const salesDetails = sales.map(sale => {
+        const profit = (sale.salesPrice - sale.Product.price) * sale.quantity;
+        totalRevenue += sale.totalPrice;
+        totalItemsSold += sale.quantity;
+        totalProfit += profit;
+  
+        return {
+          saleId: sale.id,
+          productName: sale.Product.name,
+          quantity: sale.quantity,
+          buyingPrice: sale.Product.price,
+          salesPrice: sale.salesPrice,
+          totalPrice: sale.totalPrice,
+          profit,
+          saleDate: sale.saleDate
+        };
+      });
+  
+      // Create a PDF document
+      const doc = new PDFDocument();
+      
+      // Set the response headers to force download
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
+  
+      // Pipe the PDF to the response stream
+      doc.pipe(res);
+  
+      // Add a title to the PDF
+      doc.fontSize(20).text('Sales Report', { align: 'center' });
+      doc.fontSize(12).text(`From: ${startDate} To: ${endDate}`, { align: 'center' });
+  
+      doc.moveDown();
+  
+      // Add the summary to the PDF
+      doc.text(`Total Revenue: $${totalRevenue.toFixed(2)}`);
+      doc.text(`Total Items Sold: ${totalItemsSold}`);
+      doc.text(`Total Profit: $${totalProfit.toFixed(2)}`);
+      doc.moveDown();
+  
+      // Add sales details to the PDF
+      salesDetails.forEach((sale, index) => {
+        doc.text(`Sale #${index + 1}`);
+        doc.text(`Product: ${sale.productName}`);
+        doc.text(`Quantity: ${sale.quantity}`);
+        doc.text(`Buying Price: $${sale.buyingPrice}`);
+        doc.text(`Sales Price: $${sale.salesPrice}`);
+        doc.text(`Total Price: $${sale.totalPrice}`);
+        doc.text(`Profit: $${sale.profit}`);
+        doc.text(`Date: ${sale.saleDate}`);
+        doc.moveDown();
+      });
+  
+      // Finalize the PDF and end the stream
+      doc.end();
+    } catch (error) {
+      res.status(500).json({ error: 'Error generating report' });
+    }
+  });
 
 // Start the server
 app.listen(PORT, () => {
