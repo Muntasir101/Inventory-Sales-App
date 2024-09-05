@@ -16,14 +16,16 @@ app.get('/', (req, res) => {
   res.send('Welcome to Inventory and Sales Management App');
 });
 
-// Sync database and recreate tables
-sequelize.sync({ force: true })  // This will drop the tables and recreate them
+
+// Sync database
+sequelize.sync()
   .then(() => {
-    console.log('Database synced and tables recreated');
+    console.log('Database synced');
   })
   .catch((err) => {
     console.error('Unable to sync database:', err);
   });
+  
 
 
 // CRUD routes for Product
