@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const sequelize = require('./models/db');
 const Product = require('./models/Product');
 const Sale = require('./models/Sale');
+const { Op } = require('sequelize');
 
 const app = express();
 const PORT = 3000;
@@ -15,14 +16,15 @@ app.get('/', (req, res) => {
   res.send('Welcome to Inventory and Sales Management App');
 });
 
-// Sync database
-sequelize.sync()
+// Sync database and recreate tables
+sequelize.sync({ force: true })  // This will drop the tables and recreate them
   .then(() => {
-    console.log('Database synced');
+    console.log('Database synced and tables recreated');
   })
   .catch((err) => {
     console.error('Unable to sync database:', err);
   });
+
 
 // CRUD routes for Product
 
@@ -33,6 +35,7 @@ app.post('/products', async (req, res) => {
     const product = await Product.create({ name, price, quantity });
     res.status(201).json(product);
   } catch (error) {
+    console.error(error); // Log error for debugging
     res.status(500).json({ error: 'Error creating product' });
   }
 });
@@ -43,6 +46,7 @@ app.get('/products', async (req, res) => {
     const products = await Product.findAll();
     res.json(products);
   } catch (error) {
+    console.error(error); // Log error for debugging
     res.status(500).json({ error: 'Error fetching products' });
   }
 });
@@ -58,6 +62,7 @@ app.get('/products/:id', async (req, res) => {
       res.status(404).json({ error: 'Product not found' });
     }
   } catch (error) {
+    console.error(error); // Log error for debugging
     res.status(500).json({ error: 'Error fetching product' });
   }
 });
@@ -78,6 +83,7 @@ app.put('/products/:id', async (req, res) => {
       res.status(404).json({ error: 'Product not found' });
     }
   } catch (error) {
+    console.error(error); // Log error for debugging
     res.status(500).json({ error: 'Error updating product' });
   }
 });
@@ -94,15 +100,16 @@ app.delete('/products/:id', async (req, res) => {
       res.status(404).json({ error: 'Product not found' });
     }
   } catch (error) {
+    console.error(error); // Log error for debugging
     res.status(500).json({ error: 'Error deleting product' });
   }
 });
 
 // Sales routes
 
-// 1. Create a Sale (decrease stock and record sale)
+// 1. Create a Sale (decrease stock and record sale with salesPrice)
 app.post('/sales', async (req, res) => {
-  const { productId, quantity } = req.body;
+  const { productId, quantity, salesPrice } = req.body;
   try {
     // Find the product by ID
     const product = await Product.findByPk(productId);
@@ -115,13 +122,14 @@ app.post('/sales', async (req, res) => {
       return res.status(400).json({ error: 'Not enough stock available' });
     }
 
-    // Calculate total price
-    const totalPrice = product.price * quantity;
+    // Calculate total sale price based on salesPrice
+    const totalPrice = salesPrice * quantity;
 
     // Create the sale record
     const sale = await Sale.create({
       productId: product.id,
       quantity,
+      salesPrice,
       totalPrice
     });
 
@@ -131,17 +139,94 @@ app.post('/sales', async (req, res) => {
 
     res.status(201).json({ message: 'Sale recorded successfully', sale });
   } catch (error) {
+    console.error('Error processing sale:', error); // Log the specific error
     res.status(500).json({ error: 'Error processing sale' });
   }
 });
 
-// 2. Get all Sales
+// 2. Get all Sales with profit/loss calculation
 app.get('/sales', async (req, res) => {
   try {
     const sales = await Sale.findAll({ include: Product });
-    res.json(sales);
+
+    // Calculate profit/loss for each sale
+    const salesWithProfit = sales.map(sale => {
+      const profit = (sale.salesPrice - sale.Product.price) * sale.quantity;
+      return {
+        saleId: sale.id,
+        productName: sale.Product.name,
+        quantity: sale.quantity,
+        buyingPrice: sale.Product.price,
+        salesPrice: sale.salesPrice,
+        totalPrice: sale.totalPrice,
+        saleDate: sale.saleDate,
+        profit
+      };
+    });
+
+    res.json(salesWithProfit);
   } catch (error) {
+    console.error('Error fetching sales:', error); // Log error for debugging
     res.status(500).json({ error: 'Error fetching sales' });
+  }
+});
+
+// Report generation route with profit/loss summary
+app.get('/reports', async (req, res) => {
+  const { startDate, endDate } = req.query;
+
+  // Validate input
+  if (!startDate || !endDate) {
+    return res.status(400).json({ error: 'Please provide startDate and endDate in query parameters' });
+  }
+
+  try {
+    // Fetch sales within the specified date range
+    const sales = await Sale.findAll({
+      where: {
+        saleDate: {
+          [Op.between]: [new Date(startDate), new Date(endDate)]
+        }
+      },
+      include: Product
+    });
+
+    // Calculate total revenue, total items sold, and total profit/loss
+    let totalRevenue = 0;
+    let totalItemsSold = 0;
+    let totalProfit = 0;
+
+    const salesDetails = sales.map(sale => {
+      const profit = (sale.salesPrice - sale.Product.price) * sale.quantity;
+      totalRevenue += sale.totalPrice;
+      totalItemsSold += sale.quantity;
+      totalProfit += profit;
+
+      return {
+        saleId: sale.id,
+        productName: sale.Product.name,
+        quantity: sale.quantity,
+        buyingPrice: sale.Product.price,
+        salesPrice: sale.salesPrice,
+        totalPrice: sale.totalPrice,
+        profit,
+        saleDate: sale.saleDate
+      };
+    });
+
+    // Format report
+    const report = {
+      totalRevenue,
+      totalItemsSold,
+      totalProfit,
+      totalSales: sales.length,
+      salesDetails
+    };
+
+    res.json(report);
+  } catch (error) {
+    console.error('Error generating report:', error); // Log error for debugging
+    res.status(500).json({ error: 'Error generating report' });
   }
 });
 

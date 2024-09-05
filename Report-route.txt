@@ -1,0 +1,13 @@
+How the Report Route Works:
+
+Query Parameters: The route /reports accepts two query parameters: startDate and endDate. 
+These define the period for which you want to generate the report.
+
+Example: /reports?startDate=2024-09-01&endDate=2024-09-30
+
+Fetching Sales Data: Using Sequelize's Op.between operator, it fetches sales between the provided dates.
+
+Report Metrics:
+Total Revenue: Sum of all totalPrice fields from the sales.
+Total Items Sold: Sum of all quantity fields from the sales.
+Sales Details: Provides details about each sale, including product ID, name, quantity sold, total price, and sale date.
