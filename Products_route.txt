@@ -1,0 +1,6 @@
+Product Routes:
+POST /products: Add a new product.
+GET /products: Fetch all products.
+GET /products/:id: Fetch a product by ID.
+PUT /products/:id: Update product details.
+DELETE /products/:id: Delete a product.
